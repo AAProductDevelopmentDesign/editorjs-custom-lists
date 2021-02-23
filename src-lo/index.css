@@ -1,4 +1,4 @@
-.sp-list {
+.lo-list {
     margin: 0;
     padding-left: 40px;
     outline: none;
@@ -19,7 +19,7 @@
     &-settings {
         display: flex;
 
-        .sp-settings-button {
+        .lo-settings-button {
             width: 50%;
         }
     }

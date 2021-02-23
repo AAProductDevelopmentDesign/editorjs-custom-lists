@@ -43,7 +43,7 @@ class List {
   static get toolbox() {
     return {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" width="55.2" height="40.46" viewBox="0 0 55.2 40.46"><g><path d="M45.12,60.83v9.3H35.75a11.91,11.91,0,0,1-4.85-1,12.54,12.54,0,0,1-6.59-6.59,11.91,11.91,0,0,1-1-4.85v-28h9.36v28a3,3,0,0,0,.9,2.19,2.88,2.88,0,0,0,2.16.93Z" transform="translate(-23.33 -29.67)"/><path d="M66.1,29.67a12.13,12.13,0,0,1,4.86,1,12.75,12.75,0,0,1,3.93,2.66,12.93,12.93,0,0,1,2.66,3.93,12.13,12.13,0,0,1,1,4.86V57.71a12.08,12.08,0,0,1-1,4.85,12.81,12.81,0,0,1-2.66,3.93A12.58,12.58,0,0,1,71,69.15a12,12,0,0,1-4.86,1H59.86a12,12,0,0,1-4.86-1,12.54,12.54,0,0,1-6.59-6.59,12.08,12.08,0,0,1-1-4.85V42.1a12.13,12.13,0,0,1,1-4.86A12.54,12.54,0,0,1,55,30.65a12.13,12.13,0,0,1,4.86-1ZM69.22,42.1a3,3,0,0,0-.89-2.17A3,3,0,0,0,66.1,39H59.86a3,3,0,0,0-2.23.9,3,3,0,0,0-.89,2.17V57.71a3.06,3.06,0,0,0,.89,2.19,3,3,0,0,0,2.23.93H66.1a3,3,0,0,0,2.23-.93,3.06,3.06,0,0,0,.89-2.19Z" transform="translate(-23.33 -29.67)"/></g></svg>`,
-      title: 'Summary Point',
+      title: 'Learning Objective',
     };
   }
 
@@ -136,7 +136,7 @@ class List {
 
     label.classList.add('lo-label');
 
-    label.innerText = 'Summary Point'
+    label.innerText = 'Learning Objective'
 
     this._elements.wrapper.appendChild(label)
 
@@ -301,11 +301,11 @@ class List {
   get CSS() {
     return {
       baseBlock: this.api.styles.block,
-      wrapper: 'sp-list',
-      wrapperOrdered: 'sp-list--ordered',
-      wrapperUnordered: 'sp-list--unordered',
-      item: 'sp-list__item',
-      settingsWrapper: 'sp-list-settings',
+      wrapper: 'lo-list',
+      wrapperOrdered: 'lo-list--ordered',
+      wrapperUnordered: 'lo-list--unordered',
+      item: 'lo-list__item',
+      settingsWrapper: 'lo-list-settings',
       settingsButton: this.api.styles.settingsButton,
       settingsButtonActive: this.api.styles.settingsButtonActive,
     };

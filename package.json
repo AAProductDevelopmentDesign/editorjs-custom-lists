@@ -1,5 +1,5 @@
 {
-  "name": "@editorjs/list",
+  "name": "editorjs-custom-list",
   "version": "1.6.2",
   "keywords": [
     "codex editor",
@@ -8,7 +8,7 @@
     "editor.js",
     "editorjs"
   ],
-  "description": "List Tool for Editor.js",
+  "description": "Modified List Tool for Editor.js",
   "license": "MIT",
   "repository": "https://github.com/editor-js/list",
   "main": "./dist/bundle.js",
