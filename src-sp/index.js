@@ -42,8 +42,8 @@ class List {
    */
   static get toolbox() {
     return {
-      icon: '<svg width="17" height="13" viewBox="0 0 17 13" xmlns="http://www.w3.org/2000/svg"> <path d="M5.625 4.85h9.25a1.125 1.125 0 0 1 0 2.25h-9.25a1.125 1.125 0 0 1 0-2.25zm0-4.85h9.25a1.125 1.125 0 0 1 0 2.25h-9.25a1.125 1.125 0 0 1 0-2.25zm0 9.85h9.25a1.125 1.125 0 0 1 0 2.25h-9.25a1.125 1.125 0 0 1 0-2.25zm-4.5-5a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25zm0-4.85a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25zm0 9.85a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25z"/></svg>',
-      title: 'List',
+      icon: `<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><g><path d="M224.55,240.12a53,53,0,0,1,17,11.61,56.83,56.83,0,0,1,11.46,17,54,54,0,0,1,0,41.89,54.79,54.79,0,0,1-11.46,16.93,54,54,0,0,1-17,11.45,51.51,51.51,0,0,1-20.92,4.24H123.14V303.36h80.49a14.09,14.09,0,0,0,9.59-4,12.79,12.79,0,0,0,4-9.35,13.18,13.18,0,0,0-12.89-13.45h-27.6a52.41,52.41,0,0,1-20.92-4.23,53.59,53.59,0,0,1-17.09-11.94,56.09,56.09,0,0,1-11.46-17,54,54,0,0,1,0-41.88,54.55,54.55,0,0,1,11.46-16.93,53.49,53.49,0,0,1,17-11.46,51.37,51.37,0,0,1,20.92-4.23h53.7v40.36H176.72a13,13,0,0,0-9.58,4,12.68,12.68,0,0,0-4,9.34,13.18,13.18,0,0,0,13.13,13.22h27.35A51.59,51.59,0,0,1,224.55,240.12Z"/><path d="M347.65,168.85a51.92,51.92,0,0,1,21,4.23,53.93,53.93,0,0,1,16.93,11.46A54.55,54.55,0,0,1,397,201.47a54,54,0,0,1,0,41.88,55.91,55.91,0,0,1-11.46,17A53.77,53.77,0,0,1,368.61,272a52.6,52.6,0,0,1-21,4.23H307.28v67H267.36V168.85Zm0,67a13.09,13.09,0,0,0,13.46-12.72v-.73a12.87,12.87,0,0,0-4-9.34,13.19,13.19,0,0,0-9.62-4H307.28v26.71Z"/></g></svg>`,
+      title: 'Summary Point',
     };
   }
 
@@ -105,30 +105,40 @@ class List {
    */
   render() {
     this._elements.wrapper = this.makeMainTag(this._data.style);
+    const label = document.createElement('p');
 
     // fill with data
     if (this._data.items.length) {
-      this._elements.wrapper = this.createAllElm(this._data.items);    
+      this._data.items.forEach((item) => {
+        this._elements.wrapper.appendChild(this._make('li', this.CSS.item, {
+          innerHTML: item,
+        }));
+      });
     } else {
       this._elements.wrapper.appendChild(this._make('li', this.CSS.item));
     }
 
-    // detect keydown on the last item to escape List
-    this._elements.wrapper.addEventListener('keydown', (event) => {
-      const [ENTER, BACKSPACE, TAB] = [13, 8, 9]; // key codes
+    if (!this.readOnly) {
+      // detect keydown on the last item to escape List
+      this._elements.wrapper.addEventListener('keydown', (event) => {
+        const [ENTER, BACKSPACE] = [13, 8]; // key codes
 
-      switch (event.keyCode) {
-        case ENTER:
-          this.getOutofList(event);
-          break;
-        case BACKSPACE:
-          this.backspace(event);
-          break;
-        case TAB:
-          this.addTab(event);
-          break;
-      }
-    }, false);
+        switch (event.keyCode) {
+          case ENTER:
+            this.getOutofList(event);
+            break;
+          case BACKSPACE:
+            this.backspace(event);
+            break;
+        }
+      }, false);
+    }
+
+    label.classList.add('lo-label');
+
+    label.innerText = 'Summary Point'
+
+    this._elements.wrapper.appendChild(label)
 
     return this._elements.wrapper;
   }
@@ -165,7 +175,7 @@ class List {
        */
       import: (string) => {
         return {
-          items: [ string ],
+          items: [string],
           style: 'unordered',
         };
       },
@@ -193,7 +203,7 @@ class List {
    * @returns {Element}
    */
   renderSettings() {
-    const wrapper = this._make('div', [ this.CSS.settingsWrapper ], {});
+    const wrapper = this._make('div', [this.CSS.settingsWrapper], {});
 
     this.settings.forEach((item) => {
       const itemEl = this._make('div', this.CSS.settingsButton, {
@@ -257,7 +267,7 @@ class List {
    * @param {string} style - 'ordered' or 'unordered'
    * @returns {HTMLOListElement|HTMLUListElement}
    */
-  makeMainTag(style){
+  makeMainTag(style) {
     const styleClass = style === 'ordered' ? this.CSS.wrapperOrdered : this.CSS.wrapperUnordered;
     const tag = style === 'ordered' ? 'ol' : 'ul';
 
@@ -272,13 +282,10 @@ class List {
    * @param {string} style - 'ordered'|'unordered'
    */
   toggleTune(style) {
-    this._elements.wrapper.classList.toggle(this.CSS.wrapperOrdered, style === 'ordered');
-    this._elements.wrapper.classList.toggle(this.CSS.wrapperUnordered, style === 'unordered');
-    const items = this._elements.wrapper.querySelectorAll('ul');
+    const newTag = this.makeMainTag(style);
 
-    for (let i = 0; i < items.length; i++) {
-      items[i].classList.toggle(this.CSS.wrapperOrdered, style === 'ordered');
-      items[i].classList.toggle(this.CSS.wrapperUnordered, style === 'unordered');
+    while (this._elements.wrapper.hasChildNodes()) {
+      newTag.appendChild(this._elements.wrapper.firstChild);
     }
 
     this._elements.wrapper.replaceWith(newTag);
@@ -294,11 +301,11 @@ class List {
   get CSS() {
     return {
       baseBlock: this.api.styles.block,
-      wrapper: 'cdx-list',
-      wrapperOrdered: 'cdx-list--ordered',
-      wrapperUnordered: 'cdx-list--unordered',
-      item: 'cdx-list__item',
-      settingsWrapper: 'cdx-list-settings',
+      wrapper: 'sp-list',
+      wrapperOrdered: 'sp-list--ordered',
+      wrapperUnordered: 'sp-list--unordered',
+      item: 'sp-list__item',
+      settingsWrapper: 'sp-list-settings',
       settingsButton: this.api.styles.settingsButton,
       settingsButtonActive: this.api.styles.settingsButtonActive,
     };
@@ -332,25 +339,15 @@ class List {
   get data() {
     this._data.items = [];
 
-    const itemsList = this._elements.wrapper.childNodes;
+    const items = this._elements.wrapper.querySelectorAll(`.${this.CSS.item}`);
 
-    function getData(items){
-      let dataEach = [];
-      
-      for (let i = 0; i < items.length; i++) {
-        const value = items[i].innerHTML.replace('<br>', ' ').trim();
-  
-        if (items[i].tagName == "UL") {
-          dataEach.push(getData(items[i].childNodes));
-        } else if (value) {
-          dataEach.push(items[i].innerHTML);
-        }
+    for (let i = 0; i < items.length; i++) {
+      const value = items[i].innerHTML.replace('<br>', ' ').trim();
+
+      if (value) {
+        this._data.items.push(items[i].innerHTML);
       }
-
-      return dataEach;
     }
-
-    this._data.items = getData(itemsList);
 
     return this._data;
   }
@@ -377,27 +374,6 @@ class List {
     }
 
     return el;
-  }
-
-
-  createAllElm(lidata){
-    const style = this._data.style === 'ordered' ? this.CSS.wrapperOrdered : this.CSS.wrapperUnordered;
-    const ulElem = this._make('ul', [this.CSS.baseBlock, this.CSS.wrapper, style], {
-      contentEditable: true,
-    });
-
-    lidata.forEach((item) => {
-      if (typeof(item) === "object") {
-        ulElem.appendChild(this.createAllElm(item))
-      } else {
-        ulElem.appendChild(this._make('li', this.CSS.item, {
-          innerHTML: item,
-        }));
-      } 
-    });
-
-
-    return ulElem;
   }
 
   /**
@@ -438,7 +414,8 @@ class List {
     if (currentItem === lastItem && !lastItem.textContent.trim().length) {
       /** Insert New Block and set caret */
       currentItem.parentElement.removeChild(currentItem);
-      this.api.blocks.insert(undefined, undefined, undefined, undefined, true);
+      this.api.blocks.insert();
+      this.api.caret.setToBlock(this.api.blocks.getCurrentBlockIndex());
       event.preventDefault();
       event.stopPropagation();
     }
@@ -451,7 +428,7 @@ class List {
    */
   backspace(event) {
     const items = this._elements.wrapper.querySelectorAll('.' + this.CSS.item),
-        firstItem = items[0];
+      firstItem = items[0];
 
     if (!firstItem) {
       return;
@@ -466,33 +443,6 @@ class List {
   }
 
   /**
-   * Indent the List Items
-   *
-   * @param {KeyboardEvent} event
-   */
-  addTab(event){
-    if (this.currentItem === this.currentItem.parentNode.childNodes[0]) {
-      return
-    }
-
-    const style = this._data.style === 'ordered' ? this.CSS.wrapperOrdered : this.CSS.wrapperUnordered;
-    let ol = this._make('ul', [this.CSS.baseBlock, this.CSS.wrapper, style], {
-      contentEditable: true,
-    });
-    
-    if (this.currentItem.nextSibling != null) {
-      this.currentItem.parentNode.insertBefore(ol, this.currentItem.nextSibling) 
-    } else {
-      this.currentItem.parentNode.appendChild(ol)
-    }
-    
-    ol.appendChild(this.currentItem)
-
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  /**
    * Select LI content by CMD+A
    *
    * @param {KeyboardEvent} event
@@ -501,9 +451,9 @@ class List {
     event.preventDefault();
 
     const selection = window.getSelection(),
-        currentNode = selection.anchorNode.parentNode,
-        currentItem = currentNode.closest('.' + this.CSS.item),
-        range = new Range();
+      currentNode = selection.anchorNode.parentNode,
+      currentItem = currentNode.closest('.' + this.CSS.item),
+      range = new Range();
 
     range.selectNodeContents(currentItem);
 
@@ -536,9 +486,9 @@ class List {
     };
 
     if (tag === 'LI') {
-      data.items = [ element.innerHTML ];
+      data.items = [element.innerHTML];
     } else {
-      const items = Array.from(element.childNodes);
+      const items = Array.from(element.querySelectorAll('LI'));
 
       data.items = items
         .map((li) => li.innerHTML)

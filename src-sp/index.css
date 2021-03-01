@@ -1,4 +1,4 @@
-.cdx-list {
+.sp-list {
     margin: 0;
     padding-left: 40px;
     outline: none;
@@ -19,7 +19,7 @@
     &-settings {
         display: flex;
 
-        .cdx-settings-button {
+        .sp-settings-button {
             width: 50%;
         }
     }
